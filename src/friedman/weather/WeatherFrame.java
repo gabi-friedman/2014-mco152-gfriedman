@@ -35,7 +35,6 @@ public class WeatherFrame extends JFrame{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	WeatherNow wn;
 	Weather ws[];
 	JComponent comp[];
 
@@ -46,25 +45,8 @@ public class WeatherFrame extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
 
-		Container container = getContentPane(); 
-		container.setLayout(new FlowLayout());
-
-		URL url = new URL(" http://api.openweathermap.org/data/2.5/weather?q=sydney&units=imperial");
-		StringBuilder build = new StringBuilder();
-		URLConnection connection = url.openConnection();
-		InputStream in = connection.getInputStream();
-
-		byte b[] = new byte[4096];
-		int n =-1;
-		while((n = in.read(b))!= -1){
-			String s = new String(b ,0, n);
-			build.append(s);
-		}
-
-		String json = build.toString();
-		Gson gson = new Gson();
-		
-		wn = gson.fromJson(json, WeatherNow.class);
+		Container container = new Container();
+		container.setLayout(new FlowLayout );
 
 		container.add(getCurTemp());
 		container.add(getPlc());
@@ -81,8 +63,8 @@ public class WeatherFrame extends JFrame{
 		//container.add(getAllWeather());
 		
 
-		
-
+		WeatherDonloadThread thread = new WeatherDonloadThread();
+		thread.start();
 
 
 	}
